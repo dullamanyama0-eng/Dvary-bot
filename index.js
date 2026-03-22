@@ -1,83 +1,205 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const app = express();
-const PORT = process.env.PORT || 3000;
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DVARY UNBAN METHOD - NEON</title>
+    <style>
+        /* 1. Mipangilio ya Msingi na Rangi Inayowaka */
+        :root {
+            --neon-blue: #00f2ff;
+            --neon-green: #0f9b0f;
+            --bg-dark: #0a0a0a;
+            --text-color: #ffffff;
+        }
 
-app.use(bodyParser.urlencoded({ extended: true }));
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-color);
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden; /* Kwa ajili ya background animation */
+        }
 
-// 🔐 PASSWORD ZAKO
-const USER_PASS = "dvary77";  // Ya watazamaji
-const ADMIN_PASS = "admin99"; // Yako ya siri (Admin)
+        /* 2. Background Animation (Madoa yanayotembea) */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background-image: radial-gradient(var(--neon-green) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.1;
+            animation: moveBackground 20s linear infinite;
+        }
 
-// HAPA NDIPO VIDEO ZITAHIFADHIWA (Kwa sasa zipo hizi za mfano)
-let VIDEOS = [
-    { title: "Karibu Dvary-Bot", url: "https://www.w3schools.com/html/mov_bbb.mp4" }
-];
+        @keyframes moveBackground {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-50px, -50px); }
+        }
 
-// 1. UKURASA WA NYUMBANI (PASSWORD CHECK)
-app.get('/', (req, res) => {
-    res.send(`
-        <body style="background:#000; color:#25d366; font-family:sans-serif; text-align:center; padding-top:100px;">
-            <h1>🔐 DVARY PRIVATE VAULT</h1>
-            <form action="/login" method="POST">
-                <input type="password" name="pass" placeholder="Ingiza Password..." style="padding:15px; width:80%; max-width:300px; border-radius:10px; border:none;"><br><br>
-                <button type="submit" style="padding:10px 30px; background:#25d366; font-weight:bold; border:none; cursor:pointer;">FUNGUA</button>
-            </form>
-        </body>
-    `);
-});
+        /* 3. Panel Kuu Inayowaka (The Glow Container) */
+        .container {
+            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.3); /* Mwanga wa nje */
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            z-index: 1;
+            backdrop-filter: blur(5px); /* Blur ya kisasa */
+        }
 
-// 2. LOGIC YA KUINGIA (USER VS ADMIN)
-app.post('/login', (req, res) => {
-    const pass = req.body.pass;
-    if (pass === ADMIN_PASS) return res.redirect('/admin?key=' + ADMIN_PASS);
-    if (pass === USER_PASS) return res.redirect('/view?key=' + USER_PASS);
-    res.send("Password Imekosewa! <a href='/'>Jaribu tena</a>");
-});
+        /* 4. Kichwa cha Habari Kina "Pumua" (Title Animation) */
+        h1 {
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue);
+            animation: breathe 3s ease-in-out infinite;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
 
-// 3. UKURASA WA WATAZAMAJI (VIEWER)
-app.get('/view', (req, res) => {
-    if (req.query.key !== USER_PASS) return res.redirect('/');
-    let html = VIDEOS.map(v => `
-        <div style="background:#161b22; margin:20px; padding:15px; border-radius:15px; color:#fff; border:1px solid #333;">
-            <h3>🎥 ${v.title}</h3>
-            <video width="100%" controls style="border-radius:10px;"><source src="${v.url}" type="video/mp4"></video>
+        p.subtitle {
+            color: #aaaaaa;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        @keyframes breathe {
+            0%, 100% { text-shadow: 0 0 10px var(--neon-blue); opacity: 0.8; }
+            50% { text-shadow: 0 0 25px var(--neon-blue); opacity: 1; }
+        }
+
+        /* 5. Input Boxes Zenye Neon Border */
+        input[type="text"], select {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--neon-green);
+            border-radius: 10px;
+            color: #ffffff;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 5px rgba(15, 155, 15, 0.3);
+        }
+
+        input[type="text"]:focus, select:focus {
+            outline: none;
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        /* 6. Kitufe Kinachowaka Sana (Glowing Button) */
+        button {
+            width: 100%;
+            padding: 15px;
+            background: none;
+            border: 2px solid var(--neon-green);
+            border-radius: 10px;
+            color: var(--neon-green);
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:hover {
+            background-color: var(--neon-green);
+            color: #ffffff;
+            box-shadow: 0 0 30px var(--neon-green);
+        }
+
+        /* 7. Matokeo ya Barua (The Output) */
+        #result {
+            margin-top: 30px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+            border: 1px dashed var(--neon-blue);
+            text-align: left;
+        }
+
+        #result h3 { color: var(--neon-blue); margin-top: 0; }
+        #unbanText { color: #ccc; font-size: 14px; white-space: pre-wrap; }
+        
+        #copyBtn {
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 14px;
+            border-color: var(--neon-blue);
+            color: var(--neon-blue);
+        }
+        #copyBtn:hover { background-color: var(--neon-blue); color: white; box-shadow: 0 0 20px var(--neon-blue); }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🛠 DVARY UNBAN METHOD</h1>
+        <p class="subtitle">Ingiza Namba Pata Barua ya Msamaha</p>
+        
+        <input type="text" id="phone" placeholder="Mfano: +255712XXXXXX" required>
+        
+        <select id="reason">
+            <option value="" disabled selected>Chagua kwanini umefungiwa</option>
+            <option value="spam">Nilikuwa natuma meseji nyingi (Spam)</option>
+            <option value="group">Niliongeza watu wengi kwenye Group</option>
+            <option value="bulk">Nilitumia GB WhatsApp au Softwares</option>
+            <option value="mistake">Nimefungiwa kimakosa, sijui sababu</option>
+        </select>
+        
+        <button onclick="generateAppeal()">Tengeneza Barua ya Unban</button>
+        
+        <div id="result">
+            <h3>Copy Hii Text 👇</h3>
+            <div id="unbanText"></div>
+            <button id="copyBtn" onclick="copyText()">COPY & FUNGUA EMAIL</button>
         </div>
-    `).join('');
-    res.send(`<body style="background:#0d1117; font-family:sans-serif; text-align:center; padding:20px;">
-        <h1 style="color:#25d366;">DVARY VIDEO PLAYER</h1>
-        ${html}
-    </body>`);
-});
+    </div>
 
-// 4. UKURASA WA ADMIN (KUONGEZA VIDEO)
-app.get('/admin', (req, res) => {
-    if (req.query.key !== ADMIN_PASS) return res.redirect('/');
-    res.send(`
-        <body style="background:#0d1117; color:#fff; font-family:sans-serif; padding:20px; text-align:center;">
-            <h1 style="color:#f1c40f;">🛠 ADMIN PANEL (DVARY)</h1>
-            <div style="background:#161b22; padding:20px; border-radius:15px; border:1px solid #f1c40f; max-width:400px; margin:auto;">
-                <h3>Ongeza Video Mpya</h3>
-                <form action="/add-video" method="POST">
-                    <input type="hidden" name="key" value="${ADMIN_PASS}">
-                    <input type="text" name="title" placeholder="Jina la Video..." style="width:90%; padding:10px; margin-bottom:10px;"><br>
-                    <input type="text" name="url" placeholder="Link ya Video (.mp4)..." style="width:90%; padding:10px; margin-bottom:10px;"><br>
-                    <button type="submit" style="padding:10px 20px; background:#f1c40f; border:none; font-weight:bold; cursor:pointer;">WEKA KWENYE APP</button>
-                </form>
-            </div>
-            <br><a href="/view?key=${USER_PASS}" style="color:#25d366;">Angalia Video Zilivyo</a>
-        </body>
-    `);
-});
+    <script>
+        function generateAppeal() {
+            let phone = document.getElementById('phone').value;
+            let reason = document.getElementById('reason').value;
+            
+            if (!phone || !reason) {
+                alert("Tafadhali jaza namba ya simu na uchague sababu!");
+                return;
+            }
 
-// 5. LOGIC YA KUHIFADHI VIDEO MPYA
-app.post('/add-video', (req, res) => {
-    if (req.body.key !== ADMIN_PASS) return res.send("Huruhusiwi!");
-    const { title, url } = req.body;
-    if (title && url) {
-        VIDEOS.unshift({ title, url }); // Inaweka video mpya juu kabisa
-    }
-    res.redirect('/admin?key=' + ADMIN_PASS);
-});
+            let appeals = {
+                'spam': `Hello WhatsApp Support, my number [${phone}] was banned for sending bulk messages. I apologize, I didn't know the rules. Please review my account.`,
+                'group': `Dear Sir/Madam, my WhatsApp account [${phone}] is blocked. I added too many people to a group. It was my mistake, please give me another chance.`,
+                'bulk': `Hi Support, my account [${phone}] is banned for using unofficial apps. I have uninstalled them and promise to use the original WhatsApp. Please restore my access.`,
+                'mistake': `Greetings, my WhatsApp number [${phone}] has been deactivated. I believe this is a mistake, I always follow the rules. Please check and restore my account.`
+            };
 
-app.listen(PORT, () => console.log("Admin System Live!"));
+            document.getElementById('unbanText').innerText = appeals[reason];
+            document.getElementById('result').style.display = 'block';
+        }
+
+        function copyText() {
+            let text = document.getElementById('unbanText').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Text imesha-copy! Sasa inafungua Email utume kwa Support.");
+                // Fungua Email App moja kwa moja kuelekea WhatsApp
+                window.location.href = `mailto:support@whatsapp.com?subject=Question about my WhatsApp account&body=${encodeURIComponent(text)}`;
+            });
+        }
+    </script>
+</body>
+</html>
