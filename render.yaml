@@ -1,9 +1,13 @@
+
 services:
-  - type: worker
+  - type: web
     name: dvary-bot-autojoin
     env: node
     plan: free
     region: oregon
     buildCommand: npm install
     startCommand: node index.js
+    envVars:
+      - key: PHONE_NUMBER
+        placeholder: "Ingiza namba (Mfano: 255718XXXXXX)"
 
