@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DVARY PAIRING SYSTEM</title>
+    <style>
+        body { background: #0b0f19; color: white; font-family: sans-serif; text-align: center; padding: 50px 20px; }
+        .container { border: 2px solid #00f2ff; border-radius: 20px; padding: 30px; box-shadow: 0 0 20px #00f2ff; max-width: 400px; margin: auto; }
+        h1 { color: #00f2ff; font-size: 24px; }
+        input { width: 90%; padding: 12px; margin: 20px 0; border-radius: 8px; border: none; font-size: 16px; text-align: center; }
+        button { background: #00f2ff; color: black; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; }
+        p { font-size: 12px; color: #888; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>DVARY BOT PAIRING</h1>
+        <p>Weka namba yako ya WhatsApp kupata kodi:</p>
+        <input type="text" id="number" placeholder="255694670587">
+        <button onclick="getPair()">GET PAIRING CODE</button>
+        <div id="result" style="margin-top:20px; font-weight:bold; color:#00f2ff;"></div>
+        <p>ADMIN: +255 694 670 587</p>
+    </div>
+
+    <script>
+        function getPair() {
+            const num = document.getElementById('number').value;
+            if(!num) return alert("Weka namba kwanza!");
+            document.getElementById('result').innerText = "Inatafuta kodi... Angalia kule Vercel Logs!";
+        }
+    </script>
+</body>
+</html>
+
