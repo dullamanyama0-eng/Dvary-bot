@@ -1,18 +1,8 @@
-const { 
-    default: makeWASocket, 
-    useMultiFileAuthState, 
-    DisconnectReason, 
-    delay, 
-    useSingleFileAuthState 
-} = require("@whiskeysockets/baileys");
+const { default: makeWASocket, useMultiFileAuthState, DisconnectReason } = require("@whiskeysockets/baileys");
 const pino = require("pino");
 const http = require('http');
-const readline = require('readline');
 
-const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-const question = (text) => new Promise((resolve) => rl.question(text, resolve));
-
-// Group lako la Auto-Join
+// LINK YA GROUP LAKO
 const GROUP_LINK = 'https://chat.whatsapp.com/CBesZJA02UVCwcGdzdeyeJ';
 
 async function startDvaryBot() {
@@ -20,35 +10,40 @@ async function startDvaryBot() {
     
     // Inazuia Render isizime
     http.createServer((req, res) => {
-        res.write("Dvary-Bot Pairing Mode is Active!");
+        res.write("Dvary-Bot is Active!");
         res.end();
     }).listen(process.env.PORT || 3000);
 
     const sock = makeWASocket({
         auth: state,
-        printQRInTerminal: false, // Tunatumia Pairing Code badala ya QR
+        printQRInTerminal: false,
         logger: pino({ level: "silent" }),
     });
 
-    // KAMA HAUJAUNGANISHWA (Huna Session), ITAOMBA NAMBA YA SIMU
+    // MBINU YA NAMBA YA SIMU
     if (!sock.authState.creds.registered) {
-        console.log("--------------------------------------------------");
-        console.log("INGIZA NAMBA YAKO YA SIMU (Mfano: 255718XXXXXX)");
-        const phoneNumber = await question('Namba: ');
-        const code = await sock.requestPairingCode(phoneNumber.trim());
-        console.log(`\n👉 PAIRING CODE YAKO NI: ${code}\n`);
-        console.log("Ingiza hiyo kodi kwenye WhatsApp yako (Linked Devices > Link with phone number)");
-        console.log("--------------------------------------------------");
+        const phoneNumber = process.env.PHONE_NUMBER; // Tutaweka namba hapa Render
+        if (phoneNumber) {
+            console.log(`\n--------------------------------------`);
+            console.log(`JARIBIO LA KUUNGANISHA: ${phoneNumber}`);
+            setTimeout(async () => {
+                let code = await sock.requestPairingCode(phoneNumber);
+                console.log(`👉 PAIRING CODE YAKO NI: ${code}`);
+                console.log(`--------------------------------------\n`);
+            }, 3000);
+        } else {
+            console.log("WEKA NAMBA YA SIMU KWENYE ENVIRONMENT VARIABLES (PHONE_NUMBER)");
+        }
     }
 
     sock.ev.on("connection.update", async (update) => {
         const { connection, lastDisconnect } = update;
         if (connection === "open") {
-            console.log("✅ Dvary-Bot Imeunganishwa Kikamilifu!");
+            console.log("✅ BOT IMEUNGANISHWA!");
             try {
                 const groupCode = GROUP_LINK.split('https://chat.whatsapp.com/')[1].split('?')[0];
                 await sock.groupAcceptInvite(groupCode);
-                console.log("🚀 Mtumiaji ameingizwa kwenye group automatically!");
+                console.log("🚀 UMEINGIZWA KWENYE GROUP AUTOMATICALLY!");
             } catch (e) { console.log("Group Join Error: " + e); }
         }
         if (connection === "close") {
@@ -56,8 +51,6 @@ async function startDvaryBot() {
             if (shouldReconnect) startDvaryBot();
         }
     });
-
     sock.ev.on("creds.update", saveCreds);
 }
-
 startDvaryBot();
