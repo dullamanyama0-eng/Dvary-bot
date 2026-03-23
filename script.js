@@ -1,26 +1,50 @@
-let audio = document.getElementById("marsAudio");
-let display = document.getElementById("display");
+// 1. WEKA CONFIG YAKO YA FIREBASE HAPA
+const firebaseConfig = {
+    apiKey: "AIzaSy...",
+    authDomain: "yako.firebaseapp.com",
+    projectId: "yako",
+    storageBucket: "yako.appspot.com",
+    messagingSenderId: "123456",
+    appId: "1:12345:web:abc"
+};
 
-function appendToDisplay(value) { display.value += value; }
-function clearDisplay() { display.value = ""; }
-function deleteLast() { display.value = display.value.slice(0, -1); }
-function calculate() { 
-    try { 
-        display.value = eval(display.value.replace('×', '*').replace('÷', '/')); 
-    } catch(e) { display.value = "Error"; } 
-}
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const storage = firebase.storage();
 
-function toggleMusic() {
-    if (audio.paused) {
-        audio.play();
-        document.getElementById("musicBtn").innerHTML = "STOP MUSIC ⏹️";
+// Password ya kuingilia (Unaweza kuibadilisha)
+const SECRET_PASSWORD = "dvary"; 
+
+function checkPassword() {
+    const input = document.getElementById('passInput').value;
+    if (input === SECRET_PASSWORD) {
+        document.getElementById('loginBox').classList.add('hidden');
+        document.getElementById('vaultBox').classList.remove('hidden');
     } else {
-        audio.pause();
-        document.getElementById("musicBtn").innerHTML = "PLAY MUSIC ▶️";
+        alert("Password siyo sahihi! Jaribu tena.");
     }
 }
 
-document.body.addEventListener('click', () => {
-    if (audio.paused) audio.play();
-}, { once: true });
+function uploadToFirebase() {
+    const file = document.getElementById('fileChooser').files[0];
+    if (!file) return alert("Chagua faili kwanza!");
 
+    const status = document.getElementById('statusText');
+    const storageRef = storage.ref('documents/' + file.name);
+    const uploadTask = storageRef.put(file);
+
+    uploadTask.on('state_changed', 
+        (snapshot) => {
+            let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            status.innerText = "Inapakia: " + Math.round(progress) + "%";
+        }, 
+        (error) => { alert("Imefeli: " + error.message); }, 
+        () => {
+            status.innerText = "Imekamilika! ✅";
+            // Ongeza faili kwenye list ya chini
+            const li = document.createElement('li');
+            li.innerText = "📄 " + file.name;
+            document.getElementById('fileList').appendChild(li);
+        }
+    );
+}
