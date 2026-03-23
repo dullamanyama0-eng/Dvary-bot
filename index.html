@@ -3,48 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mars Calculator | 255694670586</title>
+    <title>Dvary Doc Vault</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
 </head>
 <body>
 
-    <h1 class="title">🚀 MARS CALC</h1>
+    <div id="loginBox" class="container">
+        <h1>🔒 Private Vault</h1>
+        <p>Ingiza password kufungua documents</p>
+        <input type="password" id="passInput" placeholder="Password hapa...">
+        <button onclick="checkPassword()">Fungua</button>
+    </div>
 
-    <div class="calc-container">
-        <input type="text" id="display" placeholder="0" disabled>
-        <div class="buttons">
-            <button class="clear-btn" onclick="clearDisplay()">C</button>
-            <button onclick="appendToDisplay('/')">÷</button>
-            <button onclick="appendToDisplay('*')">×</button>
-            <button onclick="deleteLast()">⌫</button>
-            <button onclick="appendToDisplay('7')">7</button>
-            <button onclick="appendToDisplay('8')">8</button>
-            <button onclick="appendToDisplay('9')">9</button>
-            <button onclick="appendToDisplay('-')">-</button>
-            <button onclick="appendToDisplay('4')">4</button>
-            <button onclick="appendToDisplay('5')">5</button>
-            <button onclick="appendToDisplay('6')">6</button>
-            <button onclick="appendToDisplay('+')">+</button>
-            <button onclick="appendToDisplay('1')">1</button>
-            <button onclick="appendToDisplay('2')">2</button>
-            <button onclick="appendToDisplay('3')">3</button>
-            <button class="equal-btn" onclick="calculate()">=</button>
-            <button onclick="appendToDisplay('0')" style="grid-column: span 2;">0</button>
-            <button onclick="appendToDisplay('.')">.</button>
+    <div id="vaultBox" class="container hidden">
+        <h1>📂 Document Manager</h1>
+        <div class="upload-area">
+            <input type="file" id="fileChooser">
+            <button id="uploadBtn" onclick="uploadToFirebase()">Upload kwa Cloud</button>
         </div>
+        <div id="progressBox">
+            <p id="statusText">Tayari kupokea faili...</p>
+        </div>
+        <hr>
+        <h3>Documents Zilizopo:</h3>
+        <ul id="fileList"></ul>
     </div>
-
-    <div class="music-panel">
-        <p>🎵 Playing: <b>Train to Mars</b></p>
-        <button class="music-btn" onclick="toggleMusic()" id="musicBtn">STOP MUSIC ⏹️</button>
-        <audio id="marsAudio" loop>
-            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-        </audio>
-    </div>
-
-    <a href="https://wa.me/255694670586?text=Habari%2C%20nimeingia%20kwenye%20Calculator%20yako%20ya%20Mars%21" class="wa-footer" target="_blank">
-        💬 Nicheki WhatsApp
-    </a>
 
     <script src="script.js"></script>
 </body>
