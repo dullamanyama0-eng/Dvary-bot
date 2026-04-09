@@ -1,14 +1,12 @@
 {
-  "name": "Dvary-md-bot",
-  "version": "2.0.0",
-  "main": "server.js",
+  "name": "whatsapp-bot",
+  "version": "1.0.0",
+  "main": "index.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node index.js"
   },
   "dependencies": {
     "@whiskeysockets/baileys": "^6.7.0",
-    "express": "^4.18.2",
-    "axios": "^1.6.0",
-    "pino": "^8.0.0"
+    "axios": "^1.6.0"
   }
 }
