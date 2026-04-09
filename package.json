@@ -1,0 +1,13 @@
+{
+  "name": "Dvary-toolbox-pro",
+  "version": "1.0.0",
+  "description": "Elite Hacker Learning Interface",
+  "main": "index.html",
+  "scripts": {
+    "start": "http-server -p 8080"
+  },
+  "dependencies": {
+    "http-server": "^14.1.1"
+  }
+}
+
