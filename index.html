@@ -1,40 +1,29 @@
 <!DOCTYPE html>
-<html lang="sw">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DVARY PREMIUM</title>
+    <title>CYBER-TOOLBOX PRO</title>
     <style>
-        body { background: #000; color: #fff; text-align: center; margin: 0; font-family: sans-serif; }
-        .container { width: 100%; max-width: 500px; margin: auto; position: relative; }
-        video { width: 100%; background: #111; border-bottom: 3px solid #25D366; }
-        #locker { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); flex-direction: column; align-items: center; justify-content: center; z-index: 100; }
-        .btn { background: #25D366; color: white; padding: 15px 30px; border-radius: 30px; text-decoration: none; font-weight: bold; margin-top: 20px; }
+        body { background-color: black; color: #00FF00; font-family: 'Courier New', Courier, monospace; text-align: center; padding: 50px; }
+        .box { border: 2px solid #00FF00; padding: 20px; display: inline-block; border-radius: 10px; box-shadow: 0 0 15px #00FF00; }
+        h1 { font-size: 25px; text-shadow: 2px 2px #ff0000; }
+        .btn { background-color: #00FF00; color: black; padding: 10px 20px; text-decoration: none; font-weight: bold; border-radius: 5px; display: block; margin: 20px 0; }
+        .glitch { color: white; font-size: 12px; }
     </style>
 </head>
 <body>
-<div class="container">
-    <p>📺 PREVIEW MODE (15 SEC)</p>
-    <video id="dvaryVideo" controls playsinline>
-        <source src="video.mp4" type="video/mp4">
-    </video>
-    <div id="locker">
-        <h2 style="color:#25D366">🔒 IMEFUNGWA</h2>
-        <p>Lipia TZS 500 uone video yote.</p>
-        <a href="https://wa.me/225694670587?text=Nimelipia%20Video" class="btn">✅ LIPIA WHATSAPP</a>
+    <div class="box">
+        <h1>[ CYBER-TOOLBOX PRO ]</h1>
+        <p class="glitch">SYSTEM STATUS: ENCRYPTED</p>
+        <hr color="#00FF00">
+        <p>Welcome, Agent. Access your tools below:</p>
+        
+        <a href="#" class="btn">📺 CYBER ACADEMY</a>
+        <a href="#" class="btn">📂 SECRET DOCS</a>
+        <a href="https://wa.me/225694670586" class="btn" style="background-color: #25D366;">📞 CONTACT MASTER ELIA</a>
+        
+        <p style="font-size: 10px;">© 2026 DVARY HACKER CORPS</p>
     </div>
-</div>
-<script>
-    const video = document.getElementById("dvaryVideo");
-    const locker = document.getElementById("locker");
-    video.ontimeupdate = function() {
-        if (video.currentTime >= 15) {
-            video.pause();
-            video.currentTime = 15;
-            locker.style.display = "flex";
-        }
-    };
-</script>
 </body>
 </html>
-
