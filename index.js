@@ -1,21 +1,35 @@
 const express = require('express');
 const app = express();
-const port = process.env.PORT || 3000;
+const { default: makeWASocket, useMultiFileAuthState, delay } = require("@whiskeysockets/baileys");
+const pino = require("pino");
 
-app.get('/', (req, res) => {
-  res.send(`
-    <html>
-      <body style="background: black; color: #00ff00; text-align: center; font-family: sans-serif; padding-top: 100px;">
-        <h1>🛡️ DVARY SECURITY V2 🛡️</h1>
-        <p>Developed by Elia Manyama</p>
-        <div style="border: 2px solid #00ff00; display: inline-block; padding: 20px;">
-          <h3>GET YOUR PAIR CODE</h3>
-          <input type="text" id="num" placeholder="255694670587" style="padding: 10px;">
-          <button onclick="alert('Pairing system starting...')" style="padding: 10px; background: #00ff00; color: black; font-weight: bold;">GET CODE</button>
-        </div>
-      </body>
-    </html>
-  `);
+app.get('/pair', async (req, res) => {
+    let num = req.query.number;
+    if (!num) return res.send({ error: "Weka namba!" });
+
+    try {
+        const { state, saveCreds } = await useMultiFileAuthState('./session');
+        const conn = makeWASocket({
+            auth: state,
+            printQRInTerminal: false,
+            logger: pino({ level: "silent" })
+        });
+
+        // Hapa ndipo ujanja ulipo
+        if (!conn.authState.creds.registered) {
+            await delay(1500);
+            num = num.replace(/[^0-9]/g, '');
+            const code = await conn.requestPairingCode(num);
+            res.send({ code: code }); // Hapa ndipo kodi itatokea kwenye screen!
+        }
+    } catch (err) {
+        res.send({ error: "Jaribu tena baadaye!" });
+    }
 });
 
-app.listen(port, () => console.log('Dvary live on port ' + port));
+// Hii ni kwa ajili ya kuonyesha ile page yako nzuri
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/index.html'); 
+});
+
+app.listen(3000, () => console.log("Dvary Server Live"));
