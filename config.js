@@ -1,3 +1,4 @@
 module.exports = {
-  prefix: "."
-};
+  prefix: ".",
+  ownerNumber: "255694670587
+}
