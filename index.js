@@ -1,66 +1,54 @@
-const { default: makeWASocket, useMultiFileAuthState } = require("@whiskeysockets/baileys");
-const fs = require("fs");
+const { default: makeWASocket, useMultiFileAuthState } = require("@whiskeysockets/baileys")
+const pino = require("pino")
+const fs = require("fs")
+const config = require("./config")
 
 async function startBot() {
-
-    const { state, saveCreds } = await useMultiFileAuthState("sessions");
+    const { state, saveCreds } = await useMultiFileAuthState("session")
 
     const sock = makeWASocket({
-        auth: state,
-        printQRInTerminal: true
-    });
+        logger: pino({ level: "silent" }),
+        auth: state
+    })
 
-    sock.ev.on("creds.update", saveCreds);
+    sock.ev.on("creds.update", saveCreds)
 
+    // CONNECT + SET PROFILE
+    sock.ev.on("connection.update", async (update) => {
+        const { connection } = update
+
+        if (connection === "open") {
+            console.log("✅ Bot connected")
+
+            // SET PROFILE NAME
+            await sock.updateProfileName("JIMMY BOT 🤖")
+
+            // SET PROFILE PICTURE
+            const image = fs.readFileSync("./bot.jpg")
+            await sock.updateProfilePicture(sock.user.id, image)
+        }
+    })
+
+    // MESSAGE HANDLER
     sock.ev.on("messages.upsert", async ({ messages }) => {
+        const msg = messages[0]
+        if (!msg.message) return
 
-        const msg = messages[0];
-        if (!msg.message) return;
+        const text = msg.message.conversation || msg.message.extendedTextMessage?.text
+        if (!text) return
 
-        const text = msg.message.conversation || msg.message.extendedTextMessage?.text;
-        if (!text) return;
+        if (!text.startsWith(config.prefix)) return
 
-        const prefix = ".";
-        if (!text.startsWith(prefix)) return;
+        const args = text.slice(1).trim().split(" ")
+        const cmd = args.shift().toLowerCase()
 
-        const args = text.slice(1).split(" ");
-        const command = args.shift().toLowerCase();
-
-        // MENU
-        if (command === "menu") {
-            await sock.sendMessage(msg.key.remoteJid, {
-                text: `
-🤖 *WHATSAPP BOT MENU*
-
-.menu
-.ping
-.ai
-                `
-            });
+        try {
+            const commandFile = require(`./commands/${cmd}.js`)
+            commandFile(sock, msg, args)
+        } catch (err) {
+            console.log("❌ Command not found:", cmd)
         }
-
-        // PING
-        if (command === "ping") {
-            await sock.sendMessage(msg.key.remoteJid, {
-                text: "🏓 Bot is alive!"
-            });
-        }
-
-        // AI (simple placeholder)
-        if (command === "ai") {
-            const query = args.join(" ");
-            if (!query) {
-                await sock.sendMessage(msg.key.remoteJid, { text: "Andika .ai message yako" });
-                return;
-            }
-
-            await sock.sendMessage(msg.key.remoteJid, {
-                text: "🤖 AI response: " + query
-            });
-        }
-    });
-
-    console.log("Bot is running...");
+    })
 }
 
-startBot();
+startBot()
