@@ -1,37 +1,19 @@
-<div style="max-width: 400px; margin: auto; text-align: center; font-family: sans-serif;">
-    <h2>DVAR-PAY ⚡</h2>
-    <p>Lipia TZS 2,000 kwa <b>Elia (0799203820)</b></p>
-    <p>Kisha paste SMS yote ya muamala hapa chini:</p>
-    
-    <textarea id="smsInput" rows="5" style="width: 100%;" placeholder="Paste SMS hapa..."></textarea><br><br>
-    
-    <button onclick="checkPayment()" style="padding: 10px 20px; background: #25D366; color: white; border: none; cursor: pointer;">
-        HAKIKI NA UJIUNGE
-    </button>
-    
-    <p id="feedback" style="color: red;"></p>
-</div>
+<body style="background:#121212; color:white; text-align:center; padding-top:50px;">
+    <h2>DVARY PAY</h2>
+    <textarea id="sms" placeholder="Paste SMS hapa" style="width:80%; height:100px;"></textarea><br>
+    <button onclick="check()" style="padding:10px; margin-top:10px; background:green; color:white;">THIBITISHA</button>
+    <p id="msg"></p>
 
-<script>
-async function checkPayment() {
-    const sms = document.getElementById('smsInput').value;
-    const feedback = document.getElementById('feedback');
-    
-    feedback.innerText = "Inahakiki...";
-    
-    const response = await fetch('/api/verify', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ fullSms: sms })
-    });
-
-    const data = await response.json();
-    if(data.success) {
-        alert("Malipo Safi! Unapelekwa kwenye Group sasa hivi.");
-        window.location.href = data.link;
-    } else {
-        feedback.innerText = data.message;
+    <script>
+    async function check() {
+        const res = await fetch('/api/verify', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ fullSms: document.getElementById('sms').value })
+        });
+        const data = await res.json();
+        if(data.success) { window.location.href = data.link; } 
+        else { document.getElementById('msg').innerText = data.message; }
     }
-}
-</script>
-async 
+    </script>
+</body>
