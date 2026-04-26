@@ -3,73 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dvary Media | Video Portal</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Dvary QR Pro</title>
+    <style>
+        :root { --primary: #0088cc; --dark: #1a1a1a; --success: #25D366; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--dark); color: white; text-align: center; margin: 0; padding: 20px; }
+        .container { max-width: 400px; margin: auto; }
+        .card { background: #262626; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid #333; }
+        input { width: 100%; padding: 15px; margin: 15px 0; border-radius: 10px; border: 1px solid #444; background: #111; color: white; box-sizing: border-box; }
+        .btn { width: 100%; padding: 15px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .btn-pay { background: var(--primary); color: white; }
+        .btn-wa { background: var(--success); color: white; text-decoration: none; display: block; }
+        .option-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .opt-btn { background: #333; color: #ccc; padding: 10px; border-radius: 8px; font-size: 11px; border: 1px solid #444; }
+        .active-opt { border-color: var(--primary); color: white; background: #004466; }
+        #qrDisplay { margin-top: 20px; padding: 20px; background: white; border-radius: 15px; display: none; }
+        #qrDisplay img { width: 100%; height: auto; }
+        .hidden { display: none; }
+        .footer { margin-top: 20px; font-size: 10px; color: #666; }
+    </style>
 </head>
 <body>
 
-<div class="main-card">
-    <div class="logo-area">
-        <h1>DVARY MEDIA</h1>
-        <div class="status-badge">PREMIUM ACCESS</div>
+<div class="container">
+    <div id="lock" class="card">
+        <h1 style="color: var(--primary);">DVARY QR PRO</h1>
+        <p>Huduma hii ni ya kulipia. Ingiza namba ya siri uliyopewa baada ya kulipa TSH 1,000.</p>
+        <input type="password" id="pass" placeholder="Weka Voucher Code hapa...">
+        <button class="btn btn-pay" onclick="verify()">FUNGUA SASA</button>
+        <p style="font-size: 12px; margin-top: 20px;">Huna namba ya siri?</p>
+        <a href="https://wa.me/225752670587?text=Habari+Dvary,+nahitaji+Voucher+ya+QR+App" class="btn btn-wa">NUNUA KWA WHATSAPP</a>
     </div>
 
-    <div class="payment-info">
-        <p>Ili kutazama video hii, tafadhali lipia <b>TZS 1,000</b> kisha thibitisha muamala wako.</p>
+    <div id="app" class="card hidden">
+        <h3>Tengeneza QR Code</h3>
+        <div class="option-grid">
+            <button class="opt-btn" id="opt-link" onclick="setMode('link')">LINK</button>
+            <button class="opt-btn" id="opt-picha" onclick="setMode('picha')">PICHA</button>
+            <button class="opt-btn" id="opt-tel" onclick="setMode('tel')">NAMBA</button>
+        </div>
         
-        <div class="payment-methods">
-            <div class="method">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Vodacom_Logo.svg" alt="M-Pesa" width="30">
-                <span>M-PESA</span>
-            </div>
+        <input type="text" id="content" placeholder="Chagua aina juu kwanza..." disabled>
+        <button class="btn btn-pay" onclick="gen()">Tengeneza QR</button>
+
+        <div id="qrDisplay">
+            <img id="img" src="">
+            <p style="color: #333; font-size: 11px;">Imekamilika! Long press ku-save.</p>
         </div>
-
-        <div class="account-details">
-            <div class="label">Namba ya Malipo:</div>
-            <div class="number">0799203820</div>
-            <div class="name">Jina: <b>ELIA HYELA</b></div>
-        </div>
+        
+        <button class="btn" style="background:#444; color:white; margin-top:30px;" onclick="location.reload()">Funga Akaunti</button>
     </div>
-
-    <div class="form-group">
-        <label>Namba ya Muamala (Transaction ID)</label>
-        <input type="text" id="txn_input" placeholder="Mfano: SHQ0281JX9" maxlength="12">
-        <button onclick="validatePayment()" id="pay_btn">FUNGUA VIDEO SASA</button>
-    </div>
-
-    <div id="loader" class="spinner"></div>
-    <div id="response_msg"></div>
+    <div class="footer">Powered by Dvary Manyama</div>
 </div>
 
 <script>
-    function validatePayment() {
-        const input = document.getElementById('txn_input').value;
-        const msg = document.getElementById('response_msg');
-        const loader = document.getElementById('loader');
-        const btn = document.getElementById('pay_btn');
+    // LIST YA NAMBA 50 (Vouchers)
+    const codes = [
+        "DV101", "DV102", "DV103", "DV104", "DV105", "DV106", "DV107", "DV108", "DV109", "DV110",
+        "DV111", "DV112", "DV113", "DV114", "DV115", "DV116", "DV117", "DV118", "DV119", "DV120",
+        "DV121", "DV122", "DV123", "DV124", "DV125", "DV126", "DV127", "DV128", "DV129", "DV130",
+        "DV131", "DV132", "DV133", "DV134", "DV135", "DV136", "DV137", "DV138", "DV139", "DV140",
+        "DV141", "DV142", "DV143", "DV144", "DV145", "DV146", "DV147", "DV148", "DV149", "DV150"
+    ]; 
 
-        if (input.length < 5) {
-            msg.className = "error";
-            msg.innerHTML = "Tafadhali ingiza namba sahihi ya muamala uliyopewa na M-Pesa.";
-            return;
+    function verify() {
+        let p = document.getElementById('pass').value;
+        if(codes.includes(p)) {
+            document.getElementById('lock').classList.add('hidden');
+            document.getElementById('app').classList.remove('hidden');
+        } else {
+            alert("Voucher imekosewa! Nenda WhatsApp kununua voucher halali.");
         }
+    }
 
-        // Anza zoezi la "kuzungusha"
-        btn.style.display = "none";
-        loader.style.display = "block";
-        msg.className = "processing";
-        msg.innerHTML = "Inatafuta muamala wako kwenye mfumo wa M-Pesa...";
+    let mode = '';
+    function setMode(m) {
+        mode = m;
+        let input = document.getElementById('content');
+        input.disabled = false;
+        document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('active-opt'));
+        document.getElementById('opt-'+m).classList.add('active-opt');
+        
+        if(m === 'link') input.placeholder = "Weka URL (mf. https://google.com)";
+        if(m === 'picha') input.placeholder = "Weka link ya picha...";
+        if(m === 'tel') input.placeholder = "Weka namba (mf. 0752...)";
+    }
 
-        setTimeout(() => {
-            loader.style.display = "none";
-            btn.style.display = "block";
-            
-            // Jibu la kukataa
-            msg.className = "error";
-            msg.innerHTML = "<b>SAMAHANI:</b> Mtandao wa M-Pesa (API Gateway) una hitilafu kwa sasa. Muamala wako haujaweza kuhakikiwa. Tafadhali jaribu tena baada ya saa moja au wasiliana na 0799203820.";
-            
-            document.getElementById('txn_input').value = "";
-        }, 5000); // 5 seconds loading
+    function gen() {
+        let val = document.getElementById('content').value;
+        if(!val) return alert("Andika maelezo!");
+        
+        let data = val;
+        if(mode === 'tel') data = "tel:" + val;
+
+        let url = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(data);
+        document.getElementById('img').src = url;
+        document.getElementById('qrDisplay').style.display = 'block';
     }
 </script>
 
