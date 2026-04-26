@@ -3,103 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dvary QR Pro - Ultimate</title>
+    <title>Dvary QR Pro - Ultimate (Save Enabled)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root { --primary: #0088cc; --dark: #121212; --card: #1e1e1e; --success: #25D366; --accent: #00d4ff; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--dark); color: white; margin: 0; padding: 15px; }
         .container { max-width: 450px; margin: auto; }
         .card { background: var(--card); padding: 25px; border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); border: 1px solid #333; transition: 0.4s; }
-        h1, h2 { margin-bottom: 10px; letter-spacing: 1px; }
         input, select, textarea { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid #444; background: #0b0b0b; color: white; box-sizing: border-box; font-size: 15px; }
         .btn { width: 100%; padding: 16px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; font-size: 16px; text-transform: uppercase; }
-        .btn-pay { background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; box-shadow: 0 5px 15px rgba(0, 136, 204, 0.4); }
-        .btn-wa { background: var(--success); color: white; text-decoration: none; display: block; margin-top: 20px; }
-        .btn:active { transform: scale(0.98); }
+        .btn-pay { background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; }
+        .btn-save { background: var(--success); color: white; margin-top: 15px; display: none; width: 100%; }
+        .btn-wa { background: var(--success); color: white; text-decoration: none; display: block; margin-top: 20px; text-align: center; }
         .option-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
-        .opt-btn { background: #2a2a2a; color: #aaa; padding: 12px; border-radius: 12px; border: 2px solid transparent; cursor: pointer; font-size: 12px; font-weight: 600; }
+        .opt-btn { background: #2a2a2a; color: #aaa; padding: 12px; border-radius: 12px; border: 2px solid transparent; cursor: pointer; font-size: 12px; }
         .active-opt { border-color: var(--primary); color: white; background: #00334d; }
-        #qrDisplay { margin-top: 25px; padding: 15px; background: white; border-radius: 20px; display: none; flex-direction: column; align-items: center; animation: fadeIn 0.5s; }
+        #qrDisplay { margin-top: 25px; padding: 15px; background: white; border-radius: 20px; display: none; flex-direction: column; align-items: center; }
         #qrCanvas canvas { width: 100% !important; height: auto !important; border-radius: 10px; }
         .hidden { display: none; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        #status { color: #ff9800; font-size: 12px; margin: 10px 0; display: none; }
-        .footer { margin-top: 30px; font-size: 11px; color: #555; }
+        .footer { margin-top: 30px; font-size: 11px; color: #555; text-align: center; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div id="lock" class="card">
-        <h1 style="color: var(--primary); font-size: 28px;">DVARY QR PRO</h1>
-        <p style="color: #bbb;">Voucher inatumika mara moja tu. Lipia 1,000/- kupata namba yako.</p>
-        <input type="text" id="pass" placeholder="Ingiza Voucher Code...">
-        <button class="btn btn-pay" onclick="verify()">FUNGUA HUDUMA</button>
-        <a href="https://wa.me/225752670587?text=Habari+Dvary,+nahitaji+Voucher+ya+QR+App" class="btn btn-wa">NUNUA VOUCHER (WhatsApp)</a>
+    <div id="lock" class="card" style="text-align: center;">
+        <h1 style="color: var(--primary);">DVARY QR PRO</h1>
+        <p style="color: #bbb;">Weka Code kufungua utengeneze QR Code</p>
+        <input type="text" id="pass" placeholder="Ingiza Code hapa...">
+        <button class="btn btn-pay" onclick="verify()">FUNGUA SASA</button>
+        <a href="https://wa.me/225752670587?text=Habari+Dvary,+nahitaji+Code+ya+QR+App" class="btn btn-wa">NUNUA CODE (WhatsApp)</a>
     </div>
 
     <div id="app" class="card hidden">
-        <h2 style="color: var(--accent); font-size: 22px;">TENGENEZA QR CODE</h2>
+        <h2 style="color: var(--accent); text-align: center;">TENGENEZA QR CODE</h2>
         
         <div class="option-grid">
             <button class="opt-btn" id="opt-link" onclick="setMode('link')">🌐 LINK</button>
             <button class="opt-btn" id="opt-picha" onclick="setMode('picha')">🖼️ UPLOAD</button>
             <button class="opt-btn" id="opt-tel" onclick="setMode('tel')">📞 NAMBA</button>
             <button class="opt-btn" id="opt-wa" onclick="setMode('wa')">💬 WHATSAPP</button>
-            <button class="opt-btn" id="opt-text" onclick="setMode('text')">📄 TEXT</button>
         </div>
         
         <div id="inputArea">
             <input type="text" id="content" class="hidden" placeholder="Weka taarifa...">
-            <textarea id="textContent" class="hidden" rows="3" placeholder="Andika ujumbe wako..."></textarea>
-            
             <div id="fileArea" class="hidden">
-                <p style="font-size: 12px; color: #00d4ff;">Chagua picha (Compressing ipo ON):</p>
                 <input type="file" id="fileInput" accept="image/*">
             </div>
         </div>
 
         <button class="btn btn-pay" onclick="gen()">TENGENEZA SASA</button>
-        <div id="status">Inaprosesi... subiri kidogo</div>
 
         <div id="qrDisplay">
             <div id="qrCanvas"></div>
-            <p style="color: #1a1a1a; font-size: 12px; margin-top: 15px; font-weight: bold;">✅ TAYARI! Long press ku-save.</p>
+            <button id="downloadBtn" class="btn btn-save" onclick="downloadQR()">📥 DOWNLOAD QR CODE</button>
         </div>
         
-        <button class="btn" style="background:#333; color:#888; font-size:12px; margin-top:40px;" onclick="location.reload()">LOGOUT</button>
+        <button class="btn" style="background:#333; color:#888; font-size:12px; margin-top:40px;" onclick="location.reload()">LOGOUT / FUNGA</button>
     </div>
     
-    <div class="footer">
-        Dvary Manyama Brand &copy; 2026<br>
-        Technology Instructor & Developer
-    </div>
+    <div class="footer">Dvary Manyama Brand &copy; 2026</div>
 </div>
 
 <script>
-    // GENERATE VOUCHERS DV101 - DV150
     const validCodes = [];
     for(let i=101; i<=150; i++) { validCodes.push("DV" + i); }
 
     function verify() {
         let input = document.getElementById('pass');
         let code = input.value.toUpperCase().trim();
-        let used = JSON.parse(localStorage.getItem('dvary_expired') || "[]");
+        let used = JSON.parse(localStorage.getItem('dvary_expired_codes') || "[]");
 
         if (used.includes(code)) {
-            alert("❌ VOUCHER HII IMESHAISHA! Nunua nyingine WhatsApp.");
-            input.value = "";
+            alert("❌ CODE HII IMESHAISHA!");
             return;
         }
 
         if(validCodes.includes(code)) {
             used.push(code);
-            localStorage.setItem('dvary_expired', JSON.stringify(used));
+            localStorage.setItem('dvary_expired_codes', JSON.stringify(used));
             document.getElementById('lock').classList.add('hidden');
             document.getElementById('app').classList.remove('hidden');
-        } else {
-            alert("❌ VOUCHER SIO SAHIHI!");
-        }
+        } else { alert("❌ CODE SIO SAHIHI!"); }
     }
 
     let mode = 'link';
@@ -107,28 +92,19 @@
         mode = m;
         document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('active-opt'));
         document.getElementById('opt-'+m).classList.add('active-opt');
-        
-        document.getElementById('content').classList.toggle('hidden', m === 'picha' || m === 'text');
-        document.getElementById('textContent').classList.toggle('hidden', m !== 'text');
+        document.getElementById('content').classList.toggle('hidden', m === 'picha');
         document.getElementById('fileArea').classList.toggle('hidden', m !== 'picha');
-        
-        const input = document.getElementById('content');
-        if(m === 'link') input.placeholder = "Weka URL (https://...)";
-        if(m === 'tel') input.placeholder = "Weka namba ya simu...";
-        if(m === 'wa') input.placeholder = "Namba ya WhatsApp (mf. 255752...)";
-        
         document.getElementById('qrDisplay').style.display = 'none';
     }
 
     function gen() {
-        const canvas = document.getElementById('qrCanvas');
-        const status = document.getElementById('status');
-        canvas.innerHTML = "";
-        status.style.display = 'block';
-
+        const canvasDiv = document.getElementById('qrCanvas');
+        canvasDiv.innerHTML = "";
+        
+        let val = document.getElementById('content').value;
         if(mode === 'picha') {
             let file = document.getElementById('fileInput').files[0];
-            if(!file) { status.style.display='none'; return alert("Chagua picha!"); }
+            if(!file) return alert("Chagua picha!");
             let reader = new FileReader();
             reader.onload = function(e) {
                 let img = new Image();
@@ -137,30 +113,50 @@
                     let ctx = cvs.getContext('2d');
                     cvs.width = 45; cvs.height = 45;
                     ctx.drawImage(img, 0, 0, 45, 45);
-                    new QRCode(canvas, { text: cvs.toDataURL('image/jpeg', 0.1), width: 280, height: 280 });
-                    showQR();
+                    new QRCode(canvasDiv, { text: cvs.toDataURL('image/jpeg', 0.1), width: 300, height: 300 });
+                    finishGen();
                 };
                 img.src = e.target.result;
             };
             reader.readAsDataURL(file);
         } else {
-            let val = (mode === 'text') ? document.getElementById('textContent').value : document.getElementById('content').value;
-            if(!val) { status.style.display='none'; return alert("Weka taarifa!"); }
-            
+            if(!val) return alert("Jaza taarifa!");
             let data = val;
             if(mode === 'tel') data = "tel:" + val;
             if(mode === 'wa') data = "https://wa.me/" + val.replace(/\+/g, '');
-            
-            new QRCode(canvas, { text: data, width: 280, height: 280 });
-            showQR();
+            new QRCode(canvasDiv, { text: data, width: 300, height: 300 });
+            finishGen();
         }
     }
 
-    function showQR() {
-        document.getElementById('status').style.display = 'none';
+    function finishGen() {
         document.getElementById('qrDisplay').style.display = 'flex';
+        // Subiri kidogo QR itengenezwe kisha onyesha kitufe cha download
+        setTimeout(() => {
+            document.getElementById('downloadBtn').style.display = 'block';
+        }, 500);
+    }
+
+    // KAZI YA KU-SAVE PICHA KWENYE SIMU
+    function downloadQR() {
+        const canvas = document.querySelector('#qrCanvas canvas');
+        if (canvas) {
+            const image = canvas.toDataURL("image/png");
+            const link = document.createElement('a');
+            link.href = image;
+            link.download = 'Dvary-QR-Code.png';
+            link.click();
+        } else {
+            // Kwa baadhi ya simu ambazo hazitumii canvas moja kwa moja
+            const img = document.querySelector('#qrCanvas img');
+            const link = document.createElement('a');
+            link.href = img.src;
+            link.download = 'Dvary-QR-Code.png';
+            link.click();
+        }
     }
 </script>
 
 </body>
 </html>
+     
