@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dvary QR Pro - Elite Free</title>
+    <title>Dvary QR Pro - Free Edition</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root { --primary: #0088cc; --dark: #121212; --card: #1e1e1e; --success: #25D366; --warning: #ff9800; --danger: #f44336; }
@@ -15,8 +15,7 @@
         .status-container { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; }
         .badge { padding: 5px 12px; border-radius: 20px; font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
         .bg-success { background: rgba(37, 211, 102, 0.2); color: #25D366; border: 1px solid #25D366; }
-        .bg-warning { background: rgba(255, 152, 0, 0.2); color: #ff9800; border: 1px solid #ff9800; }
-        .bg-danger { background: rgba(244, 67, 54, 0.2); color: #f44336; border: 1px solid #f44336; }
+        .bg-primary { background: rgba(0, 136, 204, 0.2); color: #0088cc; border: 1px solid #0088cc; }
 
         h1 { font-size: 24px; margin: 10px 0; color: var(--primary); text-align: center; }
         input, select, textarea { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid #444; background: #0b0b0b; color: white; box-sizing: border-box; }
@@ -24,7 +23,6 @@
         .btn-pay { background: var(--primary); color: white; }
         .btn-wa { background: var(--success); color: white; text-decoration: none; display: block; text-align: center; }
         
-        /* OPTION GRID NYINGI */
         .option-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 15px 0; }
         .opt-btn { background: #2a2a2a; color: #aaa; padding: 10px; border-radius: 10px; border: 1px solid transparent; cursor: pointer; font-size: 11px; }
         .active-opt { border-color: var(--primary); color: white; background: #00334d; }
@@ -40,22 +38,21 @@
 <div class="container">
     <div id="lock" class="card">
         <div class="status-container">
-            <span class="badge bg-success">HUDUMA: BURE (FREE)</span>
-            <span class="badge bg-warning">OFFER: LAUNCH DAY</span>
-            <span class="badge bg-danger">MWISHO: HIVI KARIBUNI</span>
+            <span class="badge bg-success">STATUS: ONLINE</span>
+            <span class="badge bg-primary">VERSION: 2.1</span>
+            <span class="badge bg-success">Gharama: BURE</span>
         </div>
 
         <h1>DVARY QR PRO</h1>
-        <p style="text-align: center; color: #25D366; font-weight: bold; margin-bottom: 5px;">🔥 OFA YA LEO: NI BURE KABISA!</p>
-        <p style="text-align: center; color: #bbb; font-size: 13px;">Bonyeza FUNGUA SASA kuanza kutumia huduma.</p>
+        <p style="text-align: center; color: #25D366; font-weight: bold; margin-bottom: 5px;">MFUMO WA BURE KABISA</p>
+        <p style="text-align: center; color: #bbb; font-size: 13px;">Bonyeza kitufe hapa chini kuanza kutengeneza QR Code zako bila gharama yoyote.</p>
         
-        <input type="text" id="pass" placeholder="Andika FREE hapa (Si lazima)...">
-        <button class="btn btn-pay" onclick="verify()">FUNGUA SASA</button>
-        <a href="https://wa.me/225752670587?text=Habari+Dvary,+nimeona+QR+App+yako" class="btn btn-wa">NICHAT WHATSAPP</a>
+        <button class="btn btn-pay" onclick="verify()">FUNGUA MFUMO (FREE)</button>
+        <a href="https://wa.me/225752670587?text=Habari+Dvary,+nimependa+huduma+yako+ya+QR" class="btn btn-wa">TUTUMIE MAONI (WhatsApp)</a>
     </div>
 
     <div id="app" class="card hidden">
-        <h2 style="text-align: center; color: var(--primary); font-size: 18px;">CHAGUA OPTION</h2>
+        <h2 style="text-align: center; color: var(--primary); font-size: 18px;">CHAGUA HUDUMA</h2>
         
         <div class="option-grid">
             <button class="opt-btn" id="opt-link" onclick="setMode('link')">🌐 LINK</button>
@@ -68,7 +65,7 @@
         
         <div id="inputArea">
             <input type="text" id="content" placeholder="Ingiza taarifa hapa...">
-            <textarea id="textContent" class="hidden" rows="3" placeholder="Andika ujumbe wako..."></textarea>
+            <textarea id="textContent" class="hidden" rows="3" placeholder="Andika ujumbe hapa..."></textarea>
             
             <div id="fileArea" class="hidden">
                 <input type="file" id="fileInput" accept="image/*">
@@ -87,16 +84,15 @@
             <button id="downloadBtn" class="btn" style="background: var(--success); color: white;" onclick="downloadQR()">📥 DOWNLOAD QR CODE</button>
         </div>
         
-        <button class="btn" style="background:#333; color:#888; font-size:12px; margin-top:30px;" onclick="location.reload()">LOGOUT / FUNGA</button>
+        <button class="btn" style="background:#333; color:#888; font-size:12px; margin-top:30px;" onclick="location.reload()">RUDI MWANZO</button>
     </div>
     
-    <div class="footer">Dvary Manyama Brand &copy; 2026</div>
+    <div class="footer">Imeandaliwa na Dvary Manyama Brand &copy; 2026</div>
 </div>
 
 <script>
     function verify() {
-        // FREE MODE: Inafungua bila kujali neno lililoandikwa
-        alert("🎁 KARIBU: Furahia huduma ya Dvary QR Pro bure kwa muda mfupi!");
+        // MFUMO UKO BURE KABISA
         document.getElementById('lock').classList.add('hidden');
         document.getElementById('app').classList.remove('hidden');
         setMode('link');
@@ -122,7 +118,7 @@
         
         if(mode === 'picha') {
             let file = document.getElementById('fileInput').files[0];
-            if(!file) return alert("Chagua picha!");
+            if(!file) return alert("Chagua picha kwanza!");
             let reader = new FileReader();
             reader.onload = function(e) {
                 let img = new Image();
@@ -147,7 +143,7 @@
                 data = document.getElementById('textContent').value;
             } else {
                 let val = document.getElementById('content').value;
-                if(!val) return alert("Jaza taarifa!");
+                if(!val) return alert("Jaza taarifa husika!");
                 data = val;
                 if(mode === 'tel') data = "tel:" + val;
                 if(mode === 'wa') data = "https://wa.me/" + val.replace(/\+/g, '');
@@ -160,13 +156,13 @@
 
     function downloadQR() {
         const canvas = document.querySelector('#qrCanvas canvas') || document.querySelector('#qrCanvas img');
+        if(!canvas) return;
         const link = document.createElement('a');
         link.href = canvas.src || canvas.toDataURL("image/png");
-        link.download = 'Dvary-QR.png';
+        link.download = 'Dvary-QR-Free.png';
         link.click();
     }
 </script>
 
 </body>
 </html>
-
